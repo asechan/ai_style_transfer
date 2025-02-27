@@ -1,4 +1,3 @@
-Description:
 This project implements Neural Style Transfer (NST) using PyTorch and VGG19, leveraging the MPS backend on MacBooks with Apple Silicon (M1/M2/M3) for GPU acceleration to blend the artistic style of one image with the content of another. The model extracts deep features from both images and optimizes a new image that combines the structure of the content image with the visual patterns of the style image.
 Additionally, post-processing techniques such as gamma correction and overlay blending are applied to fine-tune the final output for a more polished look.
 
