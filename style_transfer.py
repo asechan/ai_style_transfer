@@ -35,8 +35,7 @@ def load_image(image_path, max_size=None):
             image = image.resize(new_size, Image.LANCZOS)
     transform = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                             std=[0.229, 0.224, 0.225]),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225]),
         transforms.Lambda(lambda x: x.unsqueeze(0).to(device))
     ])
     return transform(image)
@@ -95,7 +94,6 @@ def style_transfer(content_image, style_image, vgg, content_layers, style_layers
         target_features = get_features(target_image, vgg, content_layers + style_layers)
         content_features = get_features(content_image, vgg, content_layers)
         style_features = get_features(style_image, vgg, style_layers)
-
         content_loss = sum(compute_content_loss(target_features[l], content_features[l]) for l in content_layers)    
         style_loss = 0
         for layer in style_layers:
@@ -108,19 +106,17 @@ def style_transfer(content_image, style_image, vgg, content_layers, style_layers
         with torch.no_grad():
             target_image.clamp_(0,1)
         print(f"Epoch [{epoch+1}/{epochs}], Loss: {total_loss.item():.4f}")
-        
     return target_image
 
 def main():
-    content_image_path = "_DSC4597.jpg"
-    style_image_path = "IMG-20250131-WA0059.jpg"
+    content_image_path = "path to content image"
+    style_image_path = "path to style image"
     content_image = load_image(content_image_path,max_size=2048)
     style_image = load_image(style_image_path,max_size=2048)
     vgg = load_vgg()
     content_layers = ['21',]
     style_layers = ['0', '1', '3', '5', '10', '19', '28']
-    result = style_transfer(content_image, style_image, vgg, content_layers, style_layers, 
-                            epochs=20, style_weight=1, content_weight=1e3)
+    result = style_transfer(content_image, style_image, vgg, content_layers, style_layers, epochs=20, style_weight=1, content_weight=1e3)
     result_image = tensor_to_image(result)
     result_image = adjust_gamma(result_image, gamma=0.8)
     
